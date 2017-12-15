@@ -25,11 +25,6 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func reset(_ sender: Any) {
         nameField.text = ""
         lyricsView.text = ""
@@ -37,18 +32,21 @@ class ViewController: UIViewController {
     
     @IBAction func displayLyrics(_ sender: Any) {
         let name = nameField.text
-        var newLyrics = lyricsForName(lyricsTemplate: bananaFanaTemplate, fullName: name!)
-        lyricsView.text = newLyrics
+        if !(name ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
+            var newLyrics = lyricsForName(lyricsTemplate: bananaFanaTemplate, fullName: name!)
+            lyricsView.text = newLyrics
+        }
     }
     
     func shortNameForName(name: String) -> String {
         let lowercaseName = name.lowercased()
         let vowelSet = CharacterSet(charactersIn: "aeiou")
         
-        if let index = lowercaseName.rangeOfCharacter(from: vowelSet)?.lowerBound {
-            return String(name[index...])
+        if let hasVowel = lowercaseName.rangeOfCharacter(from: vowelSet) {
+            return String(name[hasVowel.lowerBound...])
+        } else {
+            return name
         }
-        return ""
     }
     
     func lyricsForName(lyricsTemplate: String, fullName: String) -> String {
