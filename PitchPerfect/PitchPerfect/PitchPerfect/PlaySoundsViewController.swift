@@ -30,8 +30,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func playSoundForButton(_ sender: UIButton) {
-        print("playSoundForButton")
-
+        
         switch(ButtonType(rawValue: sender.tag)!) {
         case .slow:
             playSound(rate: 0.5)
@@ -51,14 +50,11 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func stopButtonPress(sender: UIButton) {
-        print("stopButtonPress")
         stopAudio()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(recordedAudioURL)
-        // Do any additional setup after loading the view.
         setupAudio()
     }
     
@@ -68,6 +64,5 @@ class PlaySoundsViewController: UIViewController {
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
