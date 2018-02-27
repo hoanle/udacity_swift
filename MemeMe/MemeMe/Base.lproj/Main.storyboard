@@ -95,6 +95,7 @@
                     <connections>
                         <outlet property="bottomText" destination="G5b-y8-bg0" id="Bca-Ix-QFQ"/>
                         <outlet property="bottomToolbar" destination="lWR-cQ-1QT" id="Ae0-r6-Xsz"/>
+                        <outlet property="buttonCamera" destination="UY7-gw-gG7" id="cC9-iV-ScQ"/>
                         <outlet property="image" destination="YOd-Fs-542" id="bip-FO-ZUp"/>
                         <outlet property="topText" destination="Wrl-Ea-kTY" id="zlx-fo-UCk"/>
                         <outlet property="topToolbar" destination="Cgz-Yo-ThA" id="qPD-lN-ACf"/>

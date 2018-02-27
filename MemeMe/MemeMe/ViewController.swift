@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
+    @IBOutlet weak var buttonCamera: UIBarButtonItem!
     @IBOutlet weak var bottomToolbar: UIToolbar!
     @IBOutlet weak var topToolbar: UIToolbar!
     @IBOutlet weak var bottomText: UITextField!
@@ -17,25 +18,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var image: UIImageView!
     
     @IBAction func onPickerAlbum(_ sender: Any) {
+        presentImagePicker(UIImagePickerControllerSourceType.photoLibrary)
+    }
+    
+    @IBAction func onPickerCamera(_ sender: Any) {
+       presentImagePicker(UIImagePickerControllerSourceType.camera)
+    }
+    
+    func presentImagePicker(_ type: UIImagePickerControllerSourceType) {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
-        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.sourceType = type
         imagePickerController.allowsEditing = true
         self.present(imagePickerController, animated: true, completion: nil)
     }
     
-    @IBAction func onPickerCamera(_ sender: Any) {
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .camera;
-            imagePicker.allowsEditing = true
-            self.present(imagePicker, animated: true, completion: nil)
-        } else {
-            print("Camera not available")
-        }
+    func isCameraAvailable() ->  Bool {
+        return UIImagePickerController.isCameraDeviceAvailable(.front) || UIImagePickerController.isCameraDeviceAvailable(.rear)
     }
-    
     @IBAction func onReset(_ sender: Any) {
         image.image = UIImage.init(named: "holder_rectangle")
         bottomText.text = "Bottom text here"
@@ -51,18 +51,29 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         let avc = UIActivityViewController(activityItems: activityItem as [AnyObject], applicationActivities: nil)
         
+        avc.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if completed || error == nil {
+                self.save()
+            }
+        }
         self.present(avc, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupTextFieldsFont()
+        buttonCamera.isEnabled = isCameraAvailable()
+        
         bottomText.delegate = self
         topText.delegate = self
         bottomText.text = "Bottom text here"
         topText.text = "Top text here"
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+       
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,6 +142,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         topToolbar.isHidden = false
         bottomToolbar.isHidden = false
         return memedImage
+    }
+    
+    func setupTextFieldsFont()  {
+        let memeTextAttributes:[String:Any] = [
+            NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+            NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 35)!,
+            NSAttributedStringKey.strokeWidth.rawValue: -3.0 ]
+        
+        self.bottomText.defaultTextAttributes = memeTextAttributes
+        self.topText.defaultTextAttributes = memeTextAttributes
     }
 }
 
