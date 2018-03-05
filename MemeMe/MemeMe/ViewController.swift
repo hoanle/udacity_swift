@@ -52,7 +52,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let avc = UIActivityViewController(activityItems: activityItem as [AnyObject], applicationActivities: nil)
         
         avc.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-            if completed || error == nil {
+            if completed && error == nil {
                 self.save()
             }
         }
@@ -65,29 +65,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         setupTextFieldsFont()
         buttonCamera.isEnabled = isCameraAvailable()
         
-        bottomText.delegate = self
-        topText.delegate = self
-        bottomText.text = "Bottom text here"
-        topText.text = "Top text here"
+        setUpText(textField: bottomText, text: "Bottom text here")
+        setUpText(textField: topText, text: "Top text here")
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-       
+    }
+    
+    func setUpText(textField: UITextField, text: String) {
+        textField.text = text
+        textField.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        self.view.frame.origin.y -= getKeyboardHeight(notification: notification)
+        if bottomText.isFirstResponder {
+            self.view.frame.origin.y -= getKeyboardHeight(notification: notification)
+        }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.origin.y += getKeyboardHeight(notification: notification)
+        self.view.frame.origin.y = 0
     }
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
@@ -147,12 +149,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setupTextFieldsFont()  {
         let memeTextAttributes:[String:Any] = [
             NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.clear,
             NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 35)!,
             NSAttributedStringKey.strokeWidth.rawValue: -3.0 ]
         
         self.bottomText.defaultTextAttributes = memeTextAttributes
+        self.bottomText.borderStyle = .none
+        
         self.topText.defaultTextAttributes = memeTextAttributes
+        self.topText.borderStyle = .none
     }
 }
 
