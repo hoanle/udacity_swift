@@ -139,7 +139,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     func setupTextFieldsFont()  {
         let memeTextAttributes:[String:Any] = [
             NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.clear,
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
             NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 35)!,
             NSAttributedStringKey.strokeWidth.rawValue: -3.0 ]
         
@@ -214,12 +214,3 @@ extension ViewController: UIImagePickerControllerDelegate {
         picker.dismiss(animated: true,completion: nil)
     }
 }
-
-struct Meme {
-    var topText: String
-    var bottomText: String
-    var originalImage: UIImage
-    var memeImage: UIImage
-    var id: Int
-}
-
