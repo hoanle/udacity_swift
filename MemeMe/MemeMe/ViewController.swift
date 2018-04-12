@@ -72,11 +72,23 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTextFieldsFont()
+        
+        let memeTextAttributes:[String:Any] = [
+            NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
+            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
+            NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 35)!,
+            NSAttributedStringKey.strokeWidth.rawValue: -3.0 ]
+        
+        setupTextFieldsFont(memeTextAttributes: memeTextAttributes)
+        
         buttonCamera.isEnabled = isCameraAvailable()
     
         checkEditMode()
         
+        addObservers()
+    }
+    
+    private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
@@ -137,13 +149,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         return memedImage
     }
     
-    func setupTextFieldsFont()  {
-        let memeTextAttributes:[String:Any] = [
-            NSAttributedStringKey.strokeColor.rawValue: UIColor.black,
-            NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
-            NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 35)!,
-            NSAttributedStringKey.strokeWidth.rawValue: -3.0 ]
-        
+    func setupTextFieldsFont(memeTextAttributes:[String:Any])  {
         self.bottomText.defaultTextAttributes = memeTextAttributes
         self.bottomText.borderStyle = .none
         
