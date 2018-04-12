@@ -50,9 +50,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate {
         
         avc.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
             if completed && error == nil {
-                self.addItemToList(itemToCheck: meme)
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabbarVC") as! TabBarViewController
-                self.show(vc, sender: self)
+                self.onReset()
+                //self.addItemToList(itemToCheck: meme)
+                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabbarVC") as! TabBarViewController
+                //self.show(vc, sender: self)
             }
         }
         self.present(avc, animated: true, completion: nil)
@@ -204,11 +205,13 @@ extension ViewController: UIImagePickerControllerDelegate {
         {
             image.image = img
             enableButton(self.shareButton, true)
+            enableButton(self.cancelBtn, true)
         }
         else if let img = info[UIImagePickerControllerOriginalImage] as? UIImage
         {
             image.image = img
             enableButton(self.shareButton, true)
+            enableButton(self.cancelBtn, true)
         }
         
         picker.dismiss(animated: true,completion: nil)
